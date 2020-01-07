@@ -1,4 +1,4 @@
- bug:
+ bugs:
 
 1: mapper 找不到 ==> 不使用@Repository 注解,改使用 @Mapper注解
 
@@ -45,3 +45,34 @@ org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating
 6: Oracle "ORA-00942: 表或视图不存在 "
 
 解决: Oracle 是大小写敏感的，但是 Oracle 同样支持”” 语法，将表名或字段名加上”“后，Oracle不会将其转换成大写
+
+
+
+7: mybatis的一个bug
+
+```java
+org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 26
+```
+
+ 解决 : 结果集为空, 数据库表里没有对应的字段;
+
+
+
+8: 标识符无效(oracle)
+
+解决: oracle 大小写敏感,mybatis 在 转换时,会把列名转成 大写,但是 oracle里 表的字段名 如果是小写的话,oracle就识别不了, 
+
+9: navicat 能查询,plsql不能
+
+解决 : 当oracle数据表字段为小写时,必须使用引号("")将SQL中的列名包裹才能正确执行SQL语句.
+
+10 : 
+
+```java
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.example.datawash.dao.WordbookMapper.examineWordbookAll
+```
+
+解决 : 绑定问题, mapper.xml 中 id对应 的 sql语句 在 dao层中 未找到映射,xml中 有id 的 sql语句,在 dao层中 必须有对应的映射
+
+
+
