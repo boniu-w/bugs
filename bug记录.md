@@ -30,7 +30,7 @@ spring.datasource.url = jdbc:mysql://localhost:3306/data_wash?useUnicode=true&ch
 
 
 
-4: 不能加载bean
+4: 不能加载bean  问题 11 是另一种情况
 
 ```java
 org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'testController':
@@ -74,5 +74,58 @@ org.apache.ibatis.binding.BindingException: Invalid bound statement (not found):
 
 解决 : 绑定问题, mapper.xml 中 id对应 的 sql语句 在 dao层中 未找到映射,xml中 有id 的 sql语句,在 dao层中 必须有对应的映射
 
+11 : @Mapper  @Repository 都加载不到 dao层 bean
 
+解决 : 自定义一个 配置类 , 自己加载 bean
+
+```java
+@Configuration
+@ComponentScan(value = "org.jeecg.modules.datawash", includeFilters = {
+  @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Mapper.class})})
+public class DaoConfiguration {
+
+    @Bean
+    public WordbookMapper invokeImpController() {
+
+
+        return new WordbookMapper(){
+
+            @Override
+            public List<Wordbook> examineWordbookAll() {
+                return null;
+            }
+
+            @Override
+            public List<MatchingToWordbook> examineMatchingToWordbook() {
+                return null;
+            }
+
+            @Override
+            public int insertBankFlow(HashMap<String, Object> hashMap) {
+                return 0;
+            }
+
+            @Override
+            public String examineWordbookFieldNameByType(Integer type) {
+                return null;
+            }
+
+            @Override
+            public String examineWordbookFieldCodeByType(Integer type) {
+                return null;
+            }
+        };
+    }
+}
+```
+
+ 
+
+12  : springboot 使用thymeleaf 动态页面
+跳转静态页面需要经过controller层才能实现跳转 (不经过静态资源报错)
+否则 报 No mapping for GET错误
+
+```java
+No mapping for GET /index.html  springboot
+```
 
