@@ -129,3 +129,18 @@ public class DaoConfiguration {
 No mapping for GET /index.html  springboot
 ```
 
+13 . controller 重名
+
+```java
+unmapped spring configuration files found
+non-compatible bean definition of same name and class 
+```
+
+
+
+
+
+
+
+
+
