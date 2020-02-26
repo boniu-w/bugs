@@ -138,9 +138,59 @@ non-compatible bean definition of same name and class
 
 
 
+14.mysql 时区问题
+
+```java
+set global time_zone = '+8:00';
+set time_zone = '+8:00';
+flush privileges;
+```
 
 
 
+15: mysql 
+
+​		使用navicat 连接 mysql 时 报
+
+```java
+**caching_sha2_password**
+```
+
+​		解决:
+
+```java
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
+```
+
+
+
+16: idea 加载不了 项目 
+
+```java
+Unable to import maven project:see logs
+```
+
+​		解决:
+
+​		maven版本过高,高于 idea 能承受的版本 
+
+17: log 报红
+
+​		解决: 安装lombok 插件
+
+18: idea链接mysql 连接不上, 
+
+```java
+Connection to sj_lstj@localhost failed.
+[08001] Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+
+```
+
+  	解决: 在url后加 
+
+```java
+?serverTimezone=gmt
+```
 
 
 
