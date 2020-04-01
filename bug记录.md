@@ -244,4 +244,19 @@ select version();
 
 
 
-​																																							
+#### 22. mybatis的一个异常
+
+```java
+invalid comparison: java.sql.Timestamp and java.lang.String
+```
+
+ 解决: 
+
+mybatis 3.3.0中对于时间参数进行比较时的一个bug. 如果拿传入的时间类型参数与空字符串''进行对比判断则会引发异常. 所以在sql中去掉空串判断, 只保留非空判断就正常了																																							
+
+```xml
+<if test="changeDate != null and changeDate != '' ">
+changedate = #{changeDate},
+</if>
+```
+
