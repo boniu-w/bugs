@@ -242,9 +242,23 @@ clone时 仓库要密码
 select version();	
 ```
 
+#### 22. spring test 的一个异常
+
+```java
+Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
+```
+
+注解这样写
+
+```java
+@SpringBootTest(classes = Application.class)
+```
+
+> import javafx.application.Application;																																							
 
 
-#### 22. mybatis的一个异常
+
+#### 23. mybatis的一个异常
 
 ```java
 invalid comparison: java.sql.Timestamp and java.lang.String
@@ -259,4 +273,3 @@ mybatis 3.3.0中对于时间参数进行比较时的一个bug. 如果拿传入�
 changedate = #{changeDate},
 </if>
 ```
-
