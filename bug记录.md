@@ -194,7 +194,7 @@ Connection to sj_lstj@localhost failed.
 
 
 
-19: git 在commit 之后 没有添加注释 (没有 -m "") 报
+#### 19: git 在commit 之后 没有添加注释 (没有 -m "") 报
 
 ```java
 : src refspec master does not match any
@@ -202,13 +202,7 @@ Connection to sj_lstj@localhost failed.
 
 
 
-
-
-
-
-
-
-### 19: 系统问题
+### 20: 系统问题
 
 ```java
 yarn : 无法加载文件 d:\node_global\yarn.ps1,因为在此系统上禁止运行脚本。有关
@@ -230,19 +224,19 @@ PS C:\Users\Administrator> set-ExecutionPolicy RemoteSigned
 
 ```
 
-### 20: git 问题
+### 21: git 问题
 
 clone时 仓库要密码
 
 解决: 把密钥加到库里
 
-### 21. 查看MySQL版本号
+### 22. 查看MySQL版本号
 
 ```sql
 select version();	
 ```
 
-#### 22. spring test 的一个异常
+#### 23. spring test 的一个异常
 
 ```java
 Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
@@ -258,7 +252,7 @@ Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration
 
 
 
-#### 23. mybatis的一个异常
+#### 24. mybatis的一个异常
 
 ```java
 invalid comparison: java.sql.Timestamp and java.lang.String
@@ -273,3 +267,19 @@ mybatis 3.3.0中对于时间参数进行比较时的一个bug. 如果拿传入�
 changedate = #{changeDate},
 </if>
 ```
+
+
+
+#### 25. 空指针异常
+
+1. 是因为没有初始化变量;
+
+
+
+#### 26. poi文件导出时候的bug
+
+```java
+Caused by: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot 			    		deserialize instance of `java.util.ArrayList` out of START_OBJECT token
+
+```
+
