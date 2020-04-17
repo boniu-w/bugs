@@ -283,3 +283,8 @@ Caused by: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot 	
 
 ```
 
+解决: 解决不了,前端的问题,
+
+#### 27. poi设置颜色不起作用
+
+解决: 
