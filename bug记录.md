@@ -287,4 +287,11 @@ Caused by: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot 	
 
 #### 27. poi设置颜色不起作用
 
-解决: 
+解决:  
+
+```java
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setFillForegroundColor(HSSFColor.GOLD.index);
+    cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+```
+
