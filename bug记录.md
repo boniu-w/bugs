@@ -10,6 +10,26 @@ required a bean of type 'com.example.datawash.dao.TestDaoWordbook' that could no
 
 ​	使用 @Mapper 注解
 
+2. 启动类加
+
+3. ```java
+   java.lang.annotation.AnnotationFormatError: Invalid default: public abstract java.lang.Class org.mybatis.spring.annotation.MapperScan.factoryBean()
+   ```
+
+   版本问题,
+
+4. 缺少 spring.starter包
+
+   ```java
+    		<dependency>
+               <groupId>org.mybatis.spring.boot</groupId>
+               <artifactId>mybatis-spring-boot-starter</artifactId>
+               <version>2.1.1</version>
+           </dependency>
+   ```
+
+   
+
 
 
 ### 2: 报警告 如下 mysql 的 异常
@@ -252,7 +272,7 @@ Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration
 
 
 
-#### 24. mybatis的一个异常
+#### 24. mybatis的一个异常,invalid comparison: java.sql.Timestamp and java.lang.String
 
 ```java
 invalid comparison: java.sql.Timestamp and java.lang.String
@@ -293,5 +313,185 @@ Caused by: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot 	
     CellStyle cellStyle = workbook.createCellStyle();
     cellStyle.setFillForegroundColor(HSSFColor.GOLD.index);
     cellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+```
+
+
+
+#### 28. SpringBoot 前台页面get不到js,css文件
+
+解决:
+
+```java
+@SpringBootApplication
+public class TestApplication extends WebMvcConfigurationSupport {
+
+    public static void main(String[] args) {
+        SpringApplication.run(TestApplication.class, args);
+    }
+
+    /***************************************************
+     * 这里配置静态资源文件的路径导包都是默认的直接导入就可以
+     * @author: wg
+     * @time: 2020/4/20 15:54
+     ***************************************************/
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/static/");
+        super.addResourceHandlers(registry);
+    }
+}
+```
+
+**之后, 重启idea**
+
+
+
+#### 29. Caused by: java.lang.IllegalArgumentException: invalid comparison: java.util.Date and java.lang.String
+
+这是mybatis 的一个bug,原因是 日期 不能和 空串 比较
+
+```xml
+<if test="createTime !=  null">
+    CREATE_TIME = #{createTime},
+</if>
+```
+
+
+
+错误示例,看不同 之处
+
+```xml
+<if test="createTime != '' and createTime !=  null">
+    CREATE_TIME = #{createTime},
+</if>
+```
+
+
+
+
+
+#### 30. springboot 集成springboot data redis出错：
+
+```java
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.data.redis.connection.RedisConnectionFactory' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoMatchingBeanFound(DefaultListableBeanFactory.java:1493) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1104) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761) ~[spring-beans-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867) ~[spring-context-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543) ~[spring-context-4.3.14.RELEASE.jar:4.3.14.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.10.RELEASE.jar:1.5.10.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.10.RELEASE.jar:1.5.10.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.10.RELEASE.jar:1.5.10.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.10.RELEASE.jar:1.5.10.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.10.RELEASE.jar:1.5.10.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.10.RELEASE.jar:1.5.10.RELEASE]
+	at com.yingda.xsignal.auth.AuthApplication.main(AuthApplication.java:12) [classes/:na]
+ 
+2018-05-30 17:25:00.027 ERROR 16084 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+ 
+***************************
+APPLICATION FAILED TO START
+***************************
+ 
+Description:
+ 
+Field redisConnectionFactory in com.yingda.xsignal.auth.config.AuthorizationServerConfig required a bean of type 'org.springframework.data.redis.connection.RedisConnectionFactory' that could not be found.
+ 
+ 
+Action:
+ 
+Consider defining a bean of type 'org.springframework.data.redis.connection.RedisConnectionFactory' in your configuration.
+```
+
+
+
+原因：我们在pom.xml中引入了spring-boot-starter-data-redis却没有引入redis.client
+
+增加redis client依赖即可
+
+
+
+#### 31. 程序启动时,不连接数据库
+
+```java
+Description:
+ 
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+//无法配置数据库，没有指定url属性，并且无法配置embedded datasource
+Reason: Failed to determine a suitable driver class
+//原因：无法明确指定正确的驱动类（driver.class）
+ 
+Action:
+ 
+Consider the following:
+    If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+    If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+ 
+//建议：
+//如果如果需要加载嵌入式的数据库，请将他放入路径中
+//如果有数据库设置需要从指定配置文件中加载，需要调用该配置文件（目前没有活动的配置文件）
+ 
+Process finished with exit code 1
+```
+
+
+
+解决:
+
+```java
+程序入口处:
+ 
+@SpringBootApplication
+public class DemoApplication {
+ 
+修改为:
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+public class DemoApplication {
+```
+
+
+
+#### 32. springboot 项目 版本 修改后 ,spring-cloud 版本也要做修改,不然不匹配
+
+版本对应关系,参照如下网址:
+
+https://blog.csdn.net/qq_33407429/article/details/104494109
+
+
+
+
+
+#### 33. .properties 与 .yml  文件的区别
+
+ 
+
+
+
+#### 34. application.properties
+
+springmvc mybatis 和 springboot mybatis 在配置文件中的写法不一样;
+
+springmvc 是 :
+
+```xml
+mybatis.mapper-locations=classpath*:wgcloud/userlogin/mapper/xml/*.xml
+```
+
+springboot 是 :
+
+```xml
+mybatis.type-aliases-package=wgcloud.userlogin.mapper
 ```
 
