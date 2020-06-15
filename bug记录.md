@@ -495,3 +495,16 @@ springboot 是 :
 mybatis.type-aliases-package=wgcloud.userlogin.mapper
 ```
 
+
+
+#### 35. idea : command line is too lang
+
+```java
+Command line is too long.shorten command line for
+```
+
+Shorten command line : JAR manifest -java -cp classpath.jar classname[args]
+
+在.idea/workspace.xml文件 -> <component name="PropertiesComponent"> 添加一行 ->
+
+<property name = "dynamic.classpath" value= "true"/>
