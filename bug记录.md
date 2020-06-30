@@ -521,3 +521,29 @@ Caused by: java.lang.IllegalStateException: org.springframework.boot.web.servlet
 
 
 
+问题描述:
+
+  在controller层 自动注入一个service的bean,然后 一个全局变量 
+
+String id = 这个bean的一个方法的返回值;
+
+```java
+@Controller
+@RequestMapping(value = "/roleController")
+public class RoleController {
+
+    @Autowired
+    private UserInfoService userInfoService;
+
+    public String id = userInfoService.getCurrentUser().getId();
+}
+```
+
+
+
+
+
+
+
+
+
