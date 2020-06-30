@@ -508,3 +508,16 @@ Shorten command line : JAR manifest -java -cp classpath.jar classname[args]
 在.idea/workspace.xml文件 -> <component name="PropertiesComponent"> 添加一行 ->
 
 <property name = "dynamic.classpath" value= "true"/>
+
+
+
+#### 36. bean的循环依赖,Injection of resource dependencies failed(资源依赖项的注入失败)
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cache.annotation.**ProxyCachingConfiguration**': Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redisConfig': **Injection of resource dependencies failed;** nested exception is org.springframework.boot.context.properties.**ConfigurationPropertiesBindException**: Error creating bean with name 'spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties': Could not bind properties to 'RedisProperties' : prefix=spring.redis, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is java.lang.IllegalStateException: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@6a03bcb1 **has not been refreshed yet**
+
+Caused by: java.lang.IllegalStateException: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@6a03bcb1 has not been refreshed yet
+
+
+
+
+
