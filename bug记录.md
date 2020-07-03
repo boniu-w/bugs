@@ -543,7 +543,29 @@ public class RoleController {
 
 
 
+#### 37. java.lang.IllegalStateException: Cannot call sendError() after the response has been committed
 
 
 
+```java
+	java.lang.IllegalStateException: Cannot call sendError() after the response has been committed
+    
+    org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class java.util.HashMap] with preset Content-Type 'application/vnd.ms-excel;charset=utf-8'
+```
+
+
+
+异常原因:
+
+​	首先，利用reponse.getWrite()获得输出流对象，close()之后，这里reponse其实已经提交了。
+
+​	然后，方法回到controller 层，后面还有一句 return ApiResponse.success()，执行之后发现response已经进行已经跳转了，只不过url没有发生改变，并且页面上也不会生成返回的响应数据。所以当执行上面的return代码之后 ，reponse 会提交两次，服务器就不知道该怎么办了，就抛出异常。
+
+解决:
+
+​	第一种: 去掉service层的out.close() 这里不会因为PrintWriter 输出对象没有关闭而占用资源的。
+
+​	第二种: 让 方法返回void
+
+​	第三种: 不调用setResponseHeader(response, fileName); 	
 
