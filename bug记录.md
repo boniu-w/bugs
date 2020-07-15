@@ -569,3 +569,46 @@ public class RoleController {
 
 ​	第三种: 不调用setResponseHeader(response, fileName); 	
 
+
+
+
+
+#### 38. Caused by: org.hibernate.AnnotationException: No identifier specified for entity:
+
+
+
+在实体类的 id 字段 加 注解 @Id
+
+```java
+import javax.persistence.Id;
+
+	@Id
+    private String id;
+```
+
+
+
+
+
+#### 39. Caused by: java.lang.IllegalArgumentException: Not a managed type:
+
+在实体类上加
+
+````java
+import javax.persistence.Entity;
+
+@Entity
+````
+
+
+
+
+
+#### 40. org.hibernate.LazyInitializationException: could not initialize proxy
+
+
+
+用 findById().get()  替代 getOne();
+
+
+
