@@ -612,3 +612,19 @@ import javax.persistence.Entity;
 
 
 
+#### 41. Can't resolve 'less-loader'
+
+文件中的style用了less，而项目中未安装less：
+
+```js
+npm install --save-dev less-loader less
+```
+
+
+
+#### 42. 前台请求有数据,后台接收不到
+
+后台加注解
+
+@ResquestBody
+
