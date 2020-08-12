@@ -606,9 +606,13 @@ import javax.persistence.Entity;
 
 #### 40. org.hibernate.LazyInitializationException: could not initialize proxy
 
-
+-- jpa
 
 用 findById().get()  替代 getOne();
+
+```java
+LiuShui one = liuShuiRepository.findById(3l).get();
+```
 
 
 
@@ -628,3 +632,29 @@ npm install --save-dev less-loader less
 
 @ResquestBody
 
+
+
+
+
+#### 43. has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+
+
+火狐: 已拦截跨源请求：同源策略禁止读取位于 http://127.0.0.1:33333/test/tokenTest 的远程资源。（原因：CORS 头缺少 'Access-Control-Allow-Origin'）。
+
+
+
+chrome: Access to XMLHttpRequest at 'http://127.0.0.1:33333/test/tokenTest' from origin 'http://localhost:33333' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+
+
+跨域问题:
+
+1. 'localhost' 不识别 改成域名;
+
+2. ```java
+   response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
+   response.setHeader("Access-Control-Allow-Headers",request.getHeader("Access-Control-Request-Headers"));
+   ```
+
+   
