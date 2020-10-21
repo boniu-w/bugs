@@ -663,3 +663,57 @@ chrome: Access to XMLHttpRequest at 'http://127.0.0.1:33333/test/tokenTest' from
 #### 44. 前端bug:  This is probably not a problem with npm. There is likely additional logging output above.
 
 解决: 重新  npm install
+
+
+
+#### 45. com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException:  Specified key was too long; max key length is 1000 bytes
+
+
+
+出错的原因:
+
+1. DB engine 是MyIsAm
+2. 字符集是 utf8 ,1个utf8=3bytes
+3. 最后就是 (100+255)*3>1000 所以报错
+
+
+
+#### 46. Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986
+
+
+
+可用于复现的代码
+
+```js
+function clickSubmit1() {
+                        var values = new Array();
+                        $("#mail-content input").each(function () {
+                            values.push($(this).val())
+                        })
+
+                        var str = ["name", "company", "phone", "content"];
+
+                        var obj = values.reduce(function (result, value, index) {
+                            result[str[index]] = value;
+                            return result;
+                        }, {})
+
+                        $.ajax({
+                            url: "http://localhost:15424/ms-mcms/emailController/emailControl",
+                            data: JSON.stringify(obj),
+                            success: function (res) {
+
+                                console.log("fanhui cheng gong ")
+                            },
+                            error: function (res) {
+                                console.log(" fan hui cuo wu ")
+                            }
+                        })
+
+                    }
+```
+
+
+
+
+
