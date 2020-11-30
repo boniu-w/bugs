@@ -46,7 +46,7 @@ spring.datasource.url = jdbc:mysql://localhost:3306/data_wash?useUnicode=true&ch
 
 ### 3: arraylist.contains() 空针异常
 
-解决: 逻辑有问题
+解决: <span style="color: red">逻辑有问题</span>
 
 
 
@@ -712,6 +712,118 @@ function clickSubmit1() {
 
                     }
 ```
+
+
+
+
+
+#### 47. 'append' called on an object that does not implement interface FormData.
+
+
+
+in order to use formdata with jquery you have to set the correct options
+
+```js
+$.ajax({
+    url : "/function/pro_pic_upload.php",
+    type: "POST",
+    data : postData,
+    processData: false,
+    contentType: false,
+    success:function(data, textStatus, jqXHR){
+        $("#pro_pix img").last().show();
+        $("#pro_pix img").first().hide();
+        $("#pro_pix h6").text(data);
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+        //if fails     
+    }
+});
+```
+
+
+
+### 48. Error:(39, 24) java: 找不到符号
+  符号:   方法 setId(int)
+  位置: 类型为com.fybdp.discoverer.model.enums.DropdownDto的变量 dropdownDto
+
+
+
+解决: lombok 没起作用, 在idea 设置里 解决
+
+setting -> compiler -> annotation processors -> enable annotation processing
+
+
+
+### 49. yarn的一个error:  The engine "yarn" is incompatible with this module. Expected version ">=1.0.0".
+
+
+
+执行:
+
+```html
+ yarn config set ignore-engines true
+```
+
+
+
+
+
+## 50. jar must specify an absolute path but is /${env.ANDROID_HOME}/platforms/android-22/android.jar in com.google.zxing:core:3.3.3
+
+
+
+
+
+解决:   在 zxing 的 parent 下的.pom 里 有提示
+
+新建一个 android.jar 空文件 , 把这个文件的全路径 
+
+把
+
+> \<systemPath>/${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</systemPath>
+
+
+
+替换为:
+
+>  \<systemPath>D:\apache-maven-3.5.4\maven-repository\com\google\zxing\zxing-parent\3.3.3/android.jar</systemPath>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
