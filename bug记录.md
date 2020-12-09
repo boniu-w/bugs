@@ -795,6 +795,12 @@ setting -> compiler -> annotation processors -> enable annotation processing
 
 
 
+# 51. 前端报错 net::ERR_ABORTED 404
+
+
+
+解决: maven -> Lifecycle -> clean
+
 
 
 
