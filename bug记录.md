@@ -807,6 +807,21 @@ setting -> compiler -> annotation processors -> enable annotation processing
 
 
 
+# 52.   yml 文件报字符集问题   java.nio.charset.MalformedInputException: Input length = 1
+
+
+
+解决1: 把 中文注释删掉
+
+解决2:  先猜测原因 -> 我的是因为新电脑, 没有notepad 或 sublime , 它的打开方式默认是微软的记事本, 你懂的
+
+​		解决: 用notepad 转一下格式 , 转成utf-8 保存
+
+
+
+
+
+# 53. 20210906 一个神奇的bug:  显示在前端时一个空格, 后台显示2个空格
 
 
 
@@ -818,10 +833,14 @@ setting -> compiler -> annotation processors -> enable annotation processing
 
 
 
+# 54.  同一个包内, @requestmapping 不能有相同的value
 
-
-
-
+```java
+Caused by: java.lang.IllegalStateException: Ambiguous mapping. Cannot map 'riskAssessmentSectionInputController' method 
+com.sevenme.pipelinemanager.offshorepipeline.controller.RiskAssessmentSectionInputController#list(Map)
+to {GET /api/offshorepipeline/list}: There is already 'riskAssessmentHistoryController' bean method
+com.sevenme.pipelinemanager.offshorepipeline.controller.RiskAssessmentHistoryController#list(Map) mapped.
+```
 
 
 
