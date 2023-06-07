@@ -58,6 +58,16 @@ org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating
 
 解决: jeecg 配置类的问题, 它指定了包扫描 路径;
 
+
+
+解决2:  去掉这个注解, 这个注解的作用是 即禁止 **SpringBoot** 自动注入数据源配置, 
+
+> ```
+> // @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+> ```
+
+
+
 ### 5: org.apache.shiro.authc.AuthenticationException: Token失效，请重新登录
 
 解决: 
@@ -86,13 +96,23 @@ org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or nu
 
 解决 : 当oracle数据表字段为小写时,必须使用引号("")将SQL中的列名包裹才能正确执行SQL语句.
 
-### 10 : 
+### 10 :  mybatis
 
 ```java
 org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.example.datawash.dao.WordbookMapper.examineWordbookAll
 ```
 
-解决 : 绑定问题, mapper.xml 中 id对应 的 sql语句 在 dao层中 未找到映射,xml中 有id 的 sql语句,在 dao层中 必须有对应的映射
+解决 : 
+
+1. 第一种情况: 绑定问题, mapper.xml 中 id对应 的 sql语句 在 dao层中 未找到映射,xml中 有id 的 sql语句,在 dao层中 必须有对应的映射
+
+2. 第二种情况: 如果你把xml放到了resources文件下，那么就只需要配置mybatis.mapper-locations=classpath:*/mapper/*.xml 就可以了，因为构建的时候会把resources里的东西自动拉到classpath下，注意.classpath意思就是编译后target文件夹下的classes目录.在application.properties 里加
+
+```xml
+mybatis.mapper-locations=classpath:mapper/*.xml
+```
+
+
 
 ### 11 : @Mapper  @Repository 都加载不到 dao层 bean
 
@@ -463,6 +483,12 @@ public class DemoApplication {
 
 
 
+2. 加入 nacos 后
+
+   
+
+
+
 #### 32. springboot 项目 版本 修改后 ,spring-cloud 版本也要做修改,不然不匹配
 
 版本对应关系,参照如下网址:
@@ -825,11 +851,17 @@ setting -> compiler -> annotation processors -> enable annotation processing
 
 
 
+主要是浏览器默认只认同字符中间的一个空格，其他忽略掉。
+
+```
+<pre></pre>标记
+
+<xmp></xmp>标记
+```
 
 
 
-
-
+用以上两个标记包裹住你需要浏览器按照你的预编排的格式输出的内容，这样就可以解决这个问题了
 
 
 
@@ -846,11 +878,195 @@ com.sevenme.pipelinemanager.offshorepipeline.controller.RiskAssessmentHistoryCon
 
 
 
+# 55. 关于练习中一个关于线程的bug
+
+bug描述: 龟兔赛跑问题, 公司电脑上(联想 amd cpu 笔记本), 在debug的时候, 程序能正常停止, 但在run 的时候, 停止不了; 
+
+在自己电脑上(acer intel cpu 台式机), 都可以正常停止;
 
 
 
 
 
+# 56. trim
+
+trim 的时候 会 空指针
 
 
+
+
+
+# 57.  to absolute file path because it does not reside in the file system
+
+通过`ClassPathResource`获取resources目录中的模板文件时，直接`resource.getFile()`获取，从而导致报错
+
+原因是项目构建成jar的形式之后，resources目录中的文件并不是直接存在系统中，而是嵌套在jar文件中
+
+
+
+ 解决:  使用 FileUtils.copyInputStreamToFile(classPathResource.getInputStream(), file);
+
+```java
+ public static Properties getProperties(ClassPathResource classPathResource) {
+        Properties properties = new Properties();
+        try {
+            File file = File.createTempFile(classPathResource.getFilename(), null);
+            // File file = new File("./" + classPathResource.getFilename());
+            FileUtils.copyInputStreamToFile(classPathResource.getInputStream(), file);
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            properties.load(bufferedReader);
+            return properties;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+```
+
+
+
+测试
+
+```java
+package wg.application.message;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import wg.application.util.CommonUtil;
+
+import java.util.Properties;
+
+@RestController
+@RequestMapping(value = "error_message")
+public class ErrorMessageOfApp {
+
+    @GetMapping(value = "/get")
+    public Properties get() {
+        String path = "wg/application/message/error-messages.properties";
+        ClassPathResource pathResource = new ClassPathResource(path);
+
+        System.out.println(pathResource.getPath());
+        System.out.println(pathResource.getFilename());
+
+
+        return CommonUtil.getProperties(pathResource);
+    }
+
+}
+
+```
+
+
+
+```java
+    @Test
+    public void getErrorMessage(){
+        ErrorMessageOfApp message = new ErrorMessageOfApp();
+        Properties properties = message.get();
+
+        System.out.println(properties);
+    }
+    
+```
+
+
+
+另外 : 
+
+```xml
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <targetPath>BOOT-INF/classes/</targetPath>
+            </resource>
+
+            <!--因为默认java包即源码包下面的xml文件不会被编译，如果想要编译加上如下代码-->
+            <resource>
+                <directory>src/main/java</directory>
+                <targetPath>BOOT-INF/classes/</targetPath>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.json</include>
+                </includes>
+            </resource>
+            
+        </resources>
+
+```
+
+
+
+如果 加入 这一行  <targetPath>BOOT-INF/classes/</targetPath>
+
+在单元测试时, 会报错, 而且 连配置文件都读不到了
+
+但是, 当使用 java -jar 运行时, 都没问题, 一切正常, 配置文件也能读到
+
+看一下 打包后 目录结构
+
+
+
+![](./img/classpath.png)
+
+
+
+![](./img/classpath-2.png)
+
+
+
+
+
+ 不加   <targetPath>BOOT-INF/classes/</targetPath> 项目目录是 这样的
+
+![](./img/classpath-notarget.png)
+
+
+
+  所以, 静态文件尽量放在 static 下面
+
+
+
+# 58. java -jar 形式 能运行, 但 idea 运行不了, 提示 没有 datasource url 属性
+
+ 重启 idea
+
+
+
+
+
+# 59. druid bug
+
+druid 链接问题
+
+问题: 
+
+```
+com.alibaba.druid.pool.DruidDataSource   : create connection SQLException, url: 
+```
+
+
+
+解决:  在问号后, 加些参数
+
+```
+spring: 
+  datasource:
+    url: jdbc:mysql://192.168.12.240:13401/ci_dp_peq_strategy_asset?characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=GMT%2B8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+
+这是一段 JDBC 数据库连接参数设置的字符串，用于在应用程序中连接 MySQL 数据库。各参数含义如下：
+
+characterEncoding=UTF-8：使用 UTF-8 字符编码集处理数据。
+useSSL=false：禁用 SSL 加密传输。
+tinyInt1isBit=false：将 TINYINT 类型字段视为 int 类型而非 boolean 类型。
+allowPublicKeyRetrieval=true：允许从服务器获取 public key，可以使用一些加密算法实现更安全的连接。
+useUnicode=true：使用 Unicode 格式处理数据。
+serverTimezone=GMT+8：设置数据库时区为东八区，也就是北京时间。
+autoReconnect=true：自动重连数据库以保持连接不断开。
+zeroDateTimeBehavior=convertToNull：当数据库中 DATETIME 或 DATE 字段值为 0000-00-00 00:00:00 时，转换为 null 值。
+allowMultiQueries=true：允许执行多个查询语句，以便提高效率。
+通过正确配置这些参数，可以建立稳定、高效的数据库连接，并保证应用程序的运行质量与安全性。
+```
 
